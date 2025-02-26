@@ -30,6 +30,38 @@ def crear_usuario(usuario: UsuarioCreate, db: Session = Depends(get_db)):
     db.refresh(nuevo_usuario)
     return nuevo_usuario
 
+#Función para obtener un usuario por ID
+@router.get("/{usuario_id}", response_model=UsuarioResponse)
+def obtener_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    return usuario
+
+#Función para modificar un usuario
+@router.put("/{usuario_id}", response_model=UsuarioResponse)
+def modificar_usuario(usuario_id: int, usuario: UsuarioCreate, db: Session = Depends(get_db)):
+    db_usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if db_usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    db_usuario.nombre_completo = usuario.nombre_completo
+    db_usuario.cedula = usuario.cedula
+    db_usuario.apartamento = usuario.apartamento
+    db_usuario.torre = usuario.torre
+    db.commit()
+    db.refresh(db_usuario)
+    return db_usuario
+
+#Función para eliminar un usuario
+@router.delete("/{usuario_id}", response_model=UsuarioResponse)
+def eliminar_usuario(usuario_id: int, db: Session = Depends(get_db)):
+    usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
+    if usuario is None:
+        raise HTTPException(status_code=404, detail="Usuario no encontrado")
+    db.delete(usuario)
+    db.commit()
+    return usuario
+
 #Para obtener todos los usuarios
 @router.get("/", response_model=List[UsuarioResponse])
 def obtener_usuarios(db: Session = Depends(get_db)):
