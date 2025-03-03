@@ -26,6 +26,36 @@ def crear_espacio(espacio: EspacioCreate, db: Session = Depends(get_db)):
     db.refresh(nuevo_espacio)
     return nuevo_espacio
 
+#Función para obtener un espacio por ID
+@router.get("/{id}", response_model=EspacioResponse)
+def obtener_espacio(id: int, db: Session = Depends(get_db)):
+    espacio = db.query(Espacio).filter(Espacio.id == id).first()
+    if not espacio:
+        raise HTTPException(status_code=404, detail="El espacio no existe")
+    return espacio
+
+#Función para eliminar un espacio por ID
+@router.delete("/{id}")
+def eliminar_espacio(id: int, db: Session = Depends(get_db)):
+    espacio = db.query(Espacio).filter(Espacio.id == id).first()
+    if not espacio:
+        raise HTTPException(status_code=404, detail="El espacio no existe")
+    db.delete(espacio)
+    db.commit()
+    return {"message": "Espacio eliminado"}
+
+#Función para modificar un espacio por ID
+@router.put("/{id}", response_model=EspacioResponse)
+def modificar_espacio(id: int, espacio: EspacioCreate, db: Session = Depends(get_db)):
+    espacio_db = db.query(Espacio).filter(Espacio.id == id).first()
+    if not espacio_db:
+        raise HTTPException(status_code=404, detail="El espacio no existe")
+    espacio_db.nombre = espacio.nombre
+    espacio_db.descripcion = espacio.descripcion
+    db.commit()
+    db.refresh(espacio_db)
+    return espacio_db
+
 #Para obtener todos los espacios
 @router.get("/", response_model=List[EspacioResponse])
 def obtener_espacios(db: Session = Depends(get_db)):
