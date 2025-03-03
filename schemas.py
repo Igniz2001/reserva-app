@@ -1,7 +1,7 @@
 # Aquí se gestionan los datos que entran y salen de la base de datos
 
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import datetime, time
 
 # Esquema para crear un usuario
 class UsuarioCreate(BaseModel):
@@ -47,8 +47,9 @@ class ReservaCreate(BaseModel):
     usuario_id: int
     espacio_id: int
     fecha: datetime
-    hora_inicio: datetime
-    hora_fin: datetime
+    hora_inicio: time
+    hora_fin: time
+    estado: str
 
     class Config:
         orm_mode = True
@@ -59,8 +60,8 @@ class ReservaResponse(BaseModel):
     usuario_id: int
     espacio_id: int
     fecha: datetime
-    hora_inicio: datetime
-    hora_fin: datetime
+    hora_inicio: time
+    hora_fin: time
     estado: str
 
     class Config:

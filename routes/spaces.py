@@ -20,6 +20,7 @@ def get_db():
 #Función para crear un espacio nuevo
 @router.post("/",response_model=EspacioResponse)
 def crear_espacio(espacio: EspacioCreate, db: Session = Depends(get_db)):
+    """Crea un nuevo espacio en la base de datos"""
     nuevo_espacio = Espacio(**espacio.dict())
     db.add(nuevo_espacio)
     db.commit()
@@ -29,6 +30,7 @@ def crear_espacio(espacio: EspacioCreate, db: Session = Depends(get_db)):
 #Función para obtener un espacio por ID
 @router.get("/{id}", response_model=EspacioResponse)
 def obtener_espacio(id: int, db: Session = Depends(get_db)):
+    """Obtiene un espacio de la base de datos por su ID"""	
     espacio = db.query(Espacio).filter(Espacio.id == id).first()
     if not espacio:
         raise HTTPException(status_code=404, detail="El espacio no existe")
@@ -37,6 +39,7 @@ def obtener_espacio(id: int, db: Session = Depends(get_db)):
 #Función para eliminar un espacio por ID
 @router.delete("/{id}")
 def eliminar_espacio(id: int, db: Session = Depends(get_db)):
+    """Elimina un espacio de la base de datos, identificandolo primero por su ID"""
     espacio = db.query(Espacio).filter(Espacio.id == id).first()
     if not espacio:
         raise HTTPException(status_code=404, detail="El espacio no existe")
@@ -47,6 +50,7 @@ def eliminar_espacio(id: int, db: Session = Depends(get_db)):
 #Función para modificar un espacio por ID
 @router.put("/{id}", response_model=EspacioResponse)
 def modificar_espacio(id: int, espacio: EspacioCreate, db: Session = Depends(get_db)):
+    """Modifica un espacio de la base de datos, identificandolo primero por su ID"""
     espacio_db = db.query(Espacio).filter(Espacio.id == id).first()
     if not espacio_db:
         raise HTTPException(status_code=404, detail="El espacio no existe")
@@ -59,4 +63,5 @@ def modificar_espacio(id: int, espacio: EspacioCreate, db: Session = Depends(get
 #Para obtener todos los espacios
 @router.get("/", response_model=List[EspacioResponse])
 def obtener_espacios(db: Session = Depends(get_db)):
+    """Obtiene todos los espacios de la base de datos"""	
     return db.query(Espacio).all()
