@@ -56,7 +56,7 @@ def modificar_usuario(usuario_id: int, usuario: UsuarioCreate, db: Session = Dep
     return db_usuario
 
 #Función para eliminar un usuario
-@router.delete("/{usuario_id}", response_model=UsuarioResponse)
+@router.delete("/{usuario_id}", response_model=dict)
 def eliminar_usuario(usuario_id: int, db: Session = Depends(get_db)):
     """Elimina un usuario de la base de datos, identificandolo primero por su ID"""
     usuario = db.query(Usuario).filter(Usuario.id == usuario_id).first()
