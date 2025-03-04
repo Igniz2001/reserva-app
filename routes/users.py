@@ -64,7 +64,7 @@ def eliminar_usuario(usuario_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Usuario no encontrado")
     db.delete(usuario)
     db.commit()
-    return usuario
+    return {"message": "Usuario eliminado"}
 
 #Para obtener todos los usuarios
 @router.get("/", response_model=List[UsuarioResponse])
