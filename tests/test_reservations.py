@@ -47,3 +47,28 @@ def test_obtener_reservas(test_db):
     assert response.status_code == 200
     data = response.json()
     assert len(data) > 0
+
+def test_obtener_reserva_por_id(test_db):
+    response = client.get("/reservas/1")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["id"] == 1
+
+def test_actualizar_reserva(test_db):
+    response = client.put("/reservas/1", json={
+        "usuario_id": 1,
+        "espacio_id": 1,
+        "fecha": datetime.now().isoformat(),
+        "hora_inicio": time(11, 0).isoformat(),
+        "hora_fin": time(12, 0).isoformat(),
+        "estado": "Cancelada"
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data["estado"] == "Cancelada"
+
+def test_eliminar_reserva(test_db):
+    response = client.delete("/reservas/1")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["message"] == "Reserva eliminada"
