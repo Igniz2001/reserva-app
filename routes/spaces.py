@@ -11,6 +11,7 @@ router = APIRouter()
 
 # Se obtiene la sesión de la base de datos
 def get_db():
+    """Obtiene la sesión de la base de datos"""
     db = SessionLocal()
     try:
         yield db
