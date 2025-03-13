@@ -50,4 +50,4 @@ def test_eliminar_espacio(test_db):
     response = client.delete("/espacios/1")
     assert response.status_code == 200
     data = response.json()
-    assert data["message"] == "Espacio encontrado"
+    assert data["message"] == "Espacio eliminado"
