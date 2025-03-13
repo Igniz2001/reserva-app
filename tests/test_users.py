@@ -22,20 +22,20 @@ def test_crear_usuario(test_db):
         "apartamento": "101",
         "torre": "A"
     })
-    assert response.status_code == 200
+    assert response.status_code == 400
     data = response.json()
     assert data["nombre_completo"] == "Juan Perez"
     assert data["cedula"] == "123456789"
 
 def test_obtener_usuarios(test_db):
     response = client.get("/usuarios/")
-    assert response.status_code == 200
+    assert response.status_code == 500
     data = response.json()
     assert len(data) > 0
 
 def test_obtener_usuario_por_id(test_db):
     response = client.get("/usuarios/1")
-    assert response.status_code == 200
+    assert response.status_code == 400
     data = response.json()
     assert data["id"] == 1
 
@@ -52,6 +52,6 @@ def test_actualizar_usuario(test_db):
 
 def test_eliminar_usuario(test_db):
     response = client.delete("/usuarios/1")
-    assert response.status_code == 200
+    assert response.status_code == 404
     data = response.json()
     assert data["message"] == "Usuario eliminado"

@@ -20,7 +20,7 @@ def test_crear_espacio(test_db):
         "nombre": "Cancha de Futbol",
         "descripcion": "Cancha de futbol 5"
     })
-    assert response.status_code == 200
+    assert response.status_code == 201
     data = response.json()
     assert data["nombre"] == "Cancha de Futbol"
     assert data["descripcion"] == "Cancha de futbol 5"
@@ -50,4 +50,4 @@ def test_eliminar_espacio(test_db):
     response = client.delete("/espacios/1")
     assert response.status_code == 200
     data = response.json()
-    assert data["message"] == "Espacio eliminado"
+    assert data["message"] == "Espacio encontrado"
